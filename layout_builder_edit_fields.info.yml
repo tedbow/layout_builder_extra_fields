@@ -1,0 +1,6 @@
+name: Layout Builder Edit Fields
+type: module
+description: Proof of concept, don't use
+core_version_requirement: ^8.8
+dependencies:
+  - layout_builder

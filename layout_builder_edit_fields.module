@@ -1,0 +1,26 @@
+<?php
+
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+
+/**
+ * Implements hook_entity_form_display_alter().
+ */
+function layout_builder_edit_fields_entity_form_display_alter(EntityFormDisplayInterface $form_display, array $context) {
+  if ($context['form_mode'] === 'layout_builder') {
+    $target_entity_type = $form_display->getTargetEntityTypeId();
+    $target_bundle = $form_display->getTargetBundle();
+    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $extra_fields_form_display */
+    if ($extra_fields_form_display = EntityFormDisplay::load("$target_entity_type.$target_bundle.layout_builder_extra_fields")) {
+      $components = $extra_fields_form_display->getComponents();
+      foreach ($components as $key => $component) {
+        $form_display->setComponent($key, [
+          'type' => $component['type'],
+          'weight' => -900,
+          'settings' => $component['settings'],
+        ]);
+      }
+    }
+
+  }
+}
